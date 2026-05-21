@@ -1,0 +1,99 @@
+﻿@page "/libros"
+@using Repaso2.Models
+@using Repaso2.Services
+
+@inject LibroService libroService
+
+<h3>Ingreso de Libros</h3>
+
+<div class="mb-2">
+    <label>Código:</label>
+    <input class="form-control" @bind="libro.CodigoProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Nombre:</label>
+    <input class="form-control" @bind="libro.NombreProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Descripción:</label>
+    <input class="form-control" @bind="libro.DescripcionProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Precio Compra:</label>
+    <input type="number" class="form-control" @bind="libro.PrecioCompra" />
+</div>
+
+<div class="mb-2">
+    <label>Precio Venta:</label>
+    <input type="number" class="form-control" @bind="libro.PrecioVenta" />
+</div>
+
+<div class="mb-2">
+    <label>Editorial:</label>
+    <input class="form-control" @bind="libro.Editorial" />
+</div>
+
+<div class="mb-2">
+    <label>Categoría:</label>
+    <input class="form-control" @bind="libro.Categoria" />
+</div>
+
+<div class="mb-2">
+    <label>Autor:</label>
+    <input class="form-control" @bind="libro.Autor" />
+</div>
+
+<button class="btn btn-primary" @onclick="GuardarLibro">
+    Guardar
+</button>
+
+<hr />
+
+<h3>Listado de Libros</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Autor</th>
+            <th>Editorial</th>
+            <th>Precio Venta</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (listaLibros != null)
+        {
+            @foreach (var item in listaLibros)
+            {
+                <tr>
+                    <td>@item.CodigoProducto</td>
+                    <td>@item.NombreProducto</td>
+                    <td>@item.Autor</td>
+                    <td>@item.Editorial</td>
+                    <td>Q @item.PrecioVenta</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private Libros libro = new Libros();
+    private List<Libros> listaLibros = new List<Libros>();
+
+    protected override void OnInitialized()
+    {
+        listaLibros = libroService.ObtenerLibros();
+    }
+
+    private void GuardarLibro()
+    {
+        libroService.GuardarLibro(libro);
+        listaLibros = libroService.ObtenerLibros();
+        libro = new Libros();
+    }
+}

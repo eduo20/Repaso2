@@ -1,0 +1,94 @@
+﻿@page "/alimentos"
+@using Repaso2.Models
+@using Repaso2.Services
+
+@inject AlimentoService alimentoService
+
+<h3>Ingreso de Alimentos</h3>
+
+<div class="mb-2">
+    <label>Código:</label>
+    <input class="form-control" @bind="alimento.CodigoProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Nombre:</label>
+    <input class="form-control" @bind="alimento.NombreProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Descripción:</label>
+    <input class="form-control" @bind="alimento.DescripcionProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Precio Compra:</label>
+    <input type="number" class="form-control" @bind="alimento.PrecioCompra" />
+</div>
+
+<div class="mb-2">
+    <label>Precio Venta:</label>
+    <input type="number" class="form-control" @bind="alimento.PrecioVenta" />
+</div>
+
+<div class="mb-2">
+    <label>Fecha de Vencimiento:</label>
+    <input type="date" class="form-control" @bind="alimento.FechaVencimiento" />
+</div>
+
+<div class="mb-2">
+    <label>Unidad de Medida:</label>
+    <input class="form-control" @bind="alimento.UnidadMedida" placeholder="Ej: Libras, Kg" />
+</div>
+
+<button class="btn btn-primary" @onclick="GuardarAlimento">
+    Guardar
+</button>
+
+<hr />
+
+<h3>Listado de Alimentos</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Vencimiento</th>
+            <th>Unidad Medida</th>
+            <th>Precio Venta</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (listaAlimentos != null)
+        {
+            @foreach (var item in listaAlimentos)
+            {
+                <tr>
+                    <td>@item.CodigoProducto</td>
+                    <td>@item.NombreProducto</td>
+                    <td>@item.FechaVencimiento.ToString("dd/MM/yyyy")</td>
+                    <td>@item.UnidadMedida</td>
+                    <td>Q @item.PrecioVenta</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private Alimentos alimento = new Alimentos { FechaVencimiento = DateTime.Today };
+    private List<Alimentos> listaAlimentos = new List<Alimentos>();
+
+    protected override void OnInitialized()
+    {
+        listaAlimentos = alimentoService.ObtenerAlimentos();
+    }
+
+    private void GuardarAlimento()
+    {
+        alimentoService.GuardarAlimento(alimento);
+        listaAlimentos = alimentoService.ObtenerAlimentos();
+        alimento = new Alimentos { FechaVencimiento = DateTime.Today };
+    }
+}

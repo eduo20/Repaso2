@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace Repaso2.Models
+﻿namespace Repaso2.Models
 
 {
 

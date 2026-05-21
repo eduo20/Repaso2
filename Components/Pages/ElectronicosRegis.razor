@@ -1,0 +1,98 @@
+﻿@page "/electronicos"
+@using Repaso2.Models
+@using Repaso2.Services
+
+@inject ElectronicoService electronicoService
+
+<h3>Ingreso de Electrónicos</h3>
+
+<div class="mb-2">
+    <label>Código:</label>
+    <input class="form-control" @bind="electronico.CodigoProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Nombre:</label>
+    <input class="form-control" @bind="electronico.NombreProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Descripción:</label>
+    <input class="form-control" @bind="electronico.DescripcionProducto" />
+</div>
+
+<div class="mb-2">
+    <label>Precio Compra:</label>
+    <input type="number" class="form-control" @bind="electronico.PrecioCompra" />
+</div>
+
+<div class="mb-2">
+    <label>Precio Venta:</label>
+    <input type="number" class="form-control" @bind="electronico.PrecioVenta" />
+</div>
+
+<div class="mb-2">
+    <label>Tiempo de Garantía (meses):</label>
+    <input type="number" class="form-control" @bind="electronico.TiempoGarantia" />
+</div>
+
+<div class="mb-2">
+    <label>Voltaje:</label>
+    <input class="form-control" @bind="electronico.Voltaje" placeholder="Ej: 110V" />
+</div>
+
+<button class="btn btn-primary" @onclick="GuardarElectronico">
+    Guardar
+</button>
+
+<hr />
+
+<h3>Listado de Electrónicos</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Garantía</th>
+            <th>Voltaje</th>
+            <th>Precio Venta</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (listaElectronicos != null)
+        {
+            @foreach (var item in listaElectronicos)
+            {
+                <tr>
+                    <td>@item.CodigoProducto</td>
+                    <td>@item.NombreProducto</td>
+                    <td>@item.TiempoGarantia meses</td>
+                    <td>@item.Voltaje</td>
+                    <td>Q @item.PrecioVenta</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private Electronicos electronico = new Electronicos();
+    private List<Electronicos> listaElectronicos = new List<Electronicos>();
+
+    protected override void OnInitialized()
+    {
+        listaElectronicos = electronicoService.ObtenerElectronicos();
+    }
+
+    private void GuardarElectronico()
+    {
+        electronicoService.GuardarElectronico(electronico);
+
+        // Actualizamos la lista reflejando el cambio en pantalla inmediatamente
+        listaElectronicos = electronicoService.ObtenerElectronicos();
+
+        // Limpiamos el objeto para vaciar los inputs del formulario
+        electronico = new Electronicos();
+    }
+}

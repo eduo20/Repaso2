@@ -1,10 +1,15 @@
 using Repaso2.Components;
+using Repaso2.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<LibroService>();
+builder.Services.AddScoped<ElectronicoService>();
+builder.Services.AddScoped<AlimentoService>();
 
 var app = builder.Build();
 
